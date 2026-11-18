@@ -105,6 +105,12 @@
                         <param>kz.madiyar.plugins.*</param>
                     </targetTests>
                     <mutationThreshold>${mutation.min}</mutationThreshold>
+                    <!-- chaos: leaves a looping thread behind; gc: depends on System.gc timing.
+                         Both run in the normal build (mvn verify), only not under mutation testing. -->
+                    <excludedGroups>
+                        <param>chaos</param>
+                        <param>gc</param>
+                    </excludedGroups>
                     <outputFormats>
                         <param>HTML</param>
                         <param>XML</param>
