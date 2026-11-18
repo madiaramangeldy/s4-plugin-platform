@@ -4,13 +4,14 @@ import kz.madiyar.plugins.api.Plugin;
 import kz.madiyar.plugins.api.PluginContext;
 
 /**
- * Sample plugin #3 — malicious on purpose. Every request tries to hurt the host:
+ * Sample plugin #3 — malicious on purpose (runtime attacks). Every request tries to hurt the host:
  * <ul>
- *   <li>{@code loop} — infinite loop (never returns);</li>
- *   <li>{@code boom} — throws a RuntimeException;</li>
- *   <li>{@code oom}  — OutOfMemoryError (asks for an array larger than the VM allows);</li>
- *   <li>{@code exit} — calls System.exit to kill the whole JVM.</li>
+ *   <li>{@code loop}  — infinite loop that ignores interruption (never returns);</li>
+ *   <li>{@code boom}  — throws a RuntimeException;</li>
+ *   <li>{@code oom}   — OutOfMemoryError (asks for an array larger than the VM allows);</li>
+ *   <li>{@code deep}  — StackOverflowError (endless recursion).</li>
  * </ul>
+ * Its partner {@link ExitPlugin} attacks with System.exit.
  */
 public class EvilPlugin implements Plugin {
 
@@ -36,14 +37,17 @@ public class EvilPlugin implements Plugin {
                 sink = huge.length;
                 return "unreachable";
             }
-            case "exit" -> {
-                System.exit(66);
-                return "unreachable";
+            case "deep" -> {
+                return String.valueOf(recurse(0));
             }
             default -> {
                 return "evil says: " + request;
             }
         }
+    }
+
+    private static long recurse(long depth) {
+        return recurse(depth + 1) + 1;
     }
 
     @Override
