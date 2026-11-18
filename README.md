@@ -12,6 +12,15 @@
 4. Mutation testing: `mvn org.pitest:pitest-maven:mutationCoverage`
 5. Есептер: `target/site/jacoco/index.html` (coverage), `target/pit-reports/index.html` (mutation)
 
+   ### Демо (қорғауға арналған)
+
+Негізгі сценарий қадамдап: орнату → іске қосу → v1 плагині адаптер арқылы → зиянды плагиннің шабуылдары → System.exit бар плагин қабылданбайды → hot reload → тоқтату.
+
+```bash
+mvn test-compile
+java -cp "target/classes;target/test-classes" kz.madiyar.plugins.demo.PlatformDemo
+```
+
 ## Архитектура
 
 ```mermaid
